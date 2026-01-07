@@ -7,6 +7,11 @@
     <title>Psiquiatria Online – Dra. Hajir Abdalla | Teleconsulta humanizada</title>
     <meta name="description" content="Consultas de psiquiatria por vídeo com abordagem acolhedora e explicativa. Agende sua teleconsulta e comece sua jornada de cuidado.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,6 +48,23 @@
 }
 </script>
 <link rel="stylesheet" href="/index.css">
+<script>
+  // Aplicar tema antes do React renderizar para evitar flash
+  (function() {
+    const saved = localStorage.getItem('theme');
+    const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = saved ? saved === 'dark' : prefers;
+    const html = document.documentElement;
+    const body = document.body;
+    if (isDark) {
+      html.classList.add('dark');
+      body.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+      body.classList.remove('dark');
+    }
+  })();
+</script>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100">
     <div id="root"></div>

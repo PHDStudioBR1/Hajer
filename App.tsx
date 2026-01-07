@@ -42,14 +42,36 @@ const Header = () => {
     const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialDark = saved ? saved === 'dark' : prefers;
     setIsDark(initialDark);
-    document.documentElement.classList.toggle('dark', initialDark);
+    const html = document.documentElement;
+    const body = document.body;
+    if (initialDark) {
+      html.classList.add('dark');
+      body.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+      body.classList.remove('dark');
+    }
   }, []);
 
   const toggleTheme = () => {
     const next = !isDark;
     setIsDark(next);
-    document.documentElement.classList.toggle('dark', next);
+    const html = document.documentElement;
+    const body = document.body;
+    
+    // Usar replace para garantir que a classe seja atualizada corretamente
+    if (next) {
+      html.classList.add('dark');
+      body.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+      body.classList.remove('dark');
+    }
+    
     localStorage.setItem('theme', next ? 'dark' : 'light');
+    
+    // Forçar reflow para garantir que os estilos sejam recalculados
+    void html.offsetHeight;
   };
   const menuItems = [
     { label: 'Sobre', href: '#sobre' },
@@ -61,20 +83,32 @@ const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isDark ? 'bg-slate-900 shadow-md py-3' : (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-transparent py-5')}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isDark 
+        ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5') 
+        : (isScrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5')
+    }`}>
       <div className="container mx-auto px-4 flex items-center justify-between">
         <a href="/" className="flex items-center">
           <img 
             src="https://raw.githubusercontent.com/PHDStudioBR/PHDStudioImages/main/Dra%20Hajir%20Abdalla.svg" 
             alt="Logo Dra. Hajir Abdalla" 
-            className={`h-10 md:h-12 w-auto transition-all ${isDark || isScrolled ? 'invert brightness-0' : 'brightness-100 opacity-90'}`}
+            className={`h-10 md:h-12 w-auto transition-all ${
+              isDark 
+                ? 'invert brightness-0' 
+                : (isScrolled ? 'brightness-100 opacity-90' : 'brightness-100 opacity-90')
+            }`}
           />
         </a>
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center space-x-8">
           {menuItems.map((item) => (
-            <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${isDark || isScrolled ? 'text-slate-200 hover:text-white' : 'text-slate-700 hover:text-[#2D5B7C]'}`}>
+            <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${
+              isDark 
+                ? 'text-slate-200 hover:text-white' 
+                : (isScrolled ? 'text-slate-700 hover:text-[#2D5B7C]' : 'text-slate-700 hover:text-[#2D5B7C]')
+            }`}>
               {item.label}
             </a>
           ))}
@@ -88,7 +122,11 @@ const Header = () => {
           <button 
             onClick={toggleTheme}
             aria-label="Alternar modo escuro"
-            className={`ml-4 p-2 rounded-full transition-colors ${isDark || isScrolled ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+            className={`ml-4 p-2 rounded-full transition-colors ${
+              isDark 
+                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' 
+                : (isScrolled ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200')
+            }`}
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
@@ -96,7 +134,11 @@ const Header = () => {
 
         {/* Mobile Toggle */}
         <button 
-          className={`lg:hidden p-2 ${isDark || isScrolled ? 'text-white' : 'text-slate-700'}`}
+          className={`lg:hidden p-2 ${
+            isDark 
+              ? 'text-white' 
+              : (isScrolled ? 'text-slate-700' : 'text-slate-700')
+          }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Abrir menu"
         >
@@ -105,7 +147,11 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`lg:hidden fixed inset-0 ${isDark || isScrolled ? 'bg-slate-900 text-slate-200' : 'bg-white'} z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`lg:hidden fixed inset-0 ${
+        isDark 
+          ? 'bg-slate-900 text-slate-200' 
+          : 'bg-white text-slate-800'
+      } z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full p-8">
           <div className="flex justify-end mb-8">
             <button onClick={() => setIsMenuOpen(false)}><X size={32} /></button>
@@ -116,7 +162,11 @@ const Header = () => {
                 key={item.label} 
                 href={item.href} 
                 onClick={() => setIsMenuOpen(false)}
-                className={`text-xl font-medium pb-2 border-b ${isDark || isScrolled ? 'text-slate-200 border-slate-700' : 'text-slate-800 border-slate-100'}`}
+                className={`text-xl font-medium pb-2 border-b ${
+                  isDark 
+                    ? 'text-slate-200 border-slate-700' 
+                    : 'text-slate-800 border-slate-100'
+                }`}
               >
                 {item.label}
               </a>
@@ -220,10 +270,10 @@ const Hero = () => (
         <span className="inline-block bg-blue-100 text-[#2D5B7C] dark:bg-slate-800 dark:text-slate-200 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
           Atendimento 100% Online
         </span>
-        <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6">
+        <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white leading-tight mb-6">
           Psiquiatria online <span className="text-[#2D5B7C]">acolhedora</span> para sua saúde mental
         </h1>
-        <p className="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed">
+        <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed">
           Consulta por vídeo com abordagem humana e explicativa, focada em qualidade de vida e funcionalidade.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
@@ -341,8 +391,8 @@ const AreasOfExpertise = () => {
     <section id="areas" className="py-24 bg-slate-50 dark:bg-slate-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Áreas de atuação</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto">Tratamento focado em devolver sua funcionalidade e bem-estar.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Áreas de atuação</h2>
+          <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">Tratamento focado em devolver sua funcionalidade e bem-estar.</p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {specialties.map((item, idx) => (
@@ -350,8 +400,8 @@ const AreasOfExpertise = () => {
               <div className="w-12 h-12 bg-blue-50 dark:bg-slate-700 text-[#2D5B7C] dark:text-slate-200 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#2D5B7C] group-hover:text-white transition-colors">
                 {React.cloneElement(item.icon as React.ReactElement, { size: 28 })}
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
-              <p className="text-slate-600 mb-6 leading-relaxed">{item.desc}</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{item.title}</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">{item.desc}</p>
               <a href="#contato" className="inline-flex items-center text-[#2D5B7C] font-bold hover:gap-3 transition-all">
                 Agendar teleconsulta <ArrowRight size={18} className="ml-2" />
               </a>
@@ -380,8 +430,8 @@ const AboutSection = () => (
         </div>
       </div>
       <div>
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Abordagem humanizada e neurofuncional</h2>
-        <div className="space-y-6 text-lg text-slate-600 leading-relaxed">
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">Abordagem humanizada e neurofuncional</h2>
+        <div className="space-y-6 text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
           <p>
             Minha prática clínica é baseada na construção de um <span className="text-[#2D5B7C] font-semibold">elo de confiança</span> genuíno. Acredito que o paciente deve entender o porquê de cada decisão terapêutica.
           </p>
@@ -390,7 +440,7 @@ const AboutSection = () => (
             Trabalho com uma <span className="text-[#7EAA92] font-semibold">explicação neurofuncional acessível</span>, integrando o cuidado mente-corpo para que você tenha autonomia sobre sua própria saúde.
           </p>
           <div className="bg-slate-50 dark:bg-slate-800 p-6 rounded-2xl border-l-4 border-[#2D5B7C]">
-            <h4 className="font-bold text-slate-900 mb-2">Formação de Excelência</h4>
+            <h4 className="font-bold text-slate-900 dark:text-white mb-2">Formação de Excelência</h4>
             <p className="text-base">Médica com especialização em Psiquiatria, focada em atualização contínua e medicina baseada em evidências.</p>
           </div>
         </div>
@@ -693,9 +743,9 @@ const Footer = () => (
 
 export default function App() {
   return (
-    <div className="relative">
+    <div className="relative bg-slate-50 dark:bg-slate-900 min-h-screen">
       <Header />
-      <main>
+      <main className="bg-slate-50 dark:bg-slate-900">
         <Hero />
         <HowItWorks />
         <AreasOfExpertise />
