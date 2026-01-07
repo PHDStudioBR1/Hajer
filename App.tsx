@@ -59,7 +59,7 @@ const Header = () => {
     const html = document.documentElement;
     const body = document.body;
     
-    // Usar replace para garantir que a classe seja atualizada corretamente
+    // Usar add/remove explícitos para garantir que a classe seja atualizada corretamente
     if (next) {
       html.classList.add('dark');
       body.classList.add('dark');
