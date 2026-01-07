@@ -43,12 +43,14 @@ const Header = () => {
     const initialDark = saved ? saved === 'dark' : prefers;
     setIsDark(initialDark);
     document.documentElement.classList.toggle('dark', initialDark);
+    document.body.classList.toggle('dark', initialDark);
   }, []);
 
   const toggleTheme = () => {
     const next = !isDark;
     setIsDark(next);
     document.documentElement.classList.toggle('dark', next);
+    document.body.classList.toggle('dark', next);
     localStorage.setItem('theme', next ? 'dark' : 'light');
   };
   const menuItems = [
