@@ -91,7 +91,7 @@ const Header = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <a href="/" className="flex items-center">
           <img 
-            src="https://raw.githubusercontent.com/PHDStudioBR/PHDStudioImages/main/Dra%20Hajir%20Abdalla.svg" 
+            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg" 
             alt="Logo Dra. Hajir Abdalla" 
             className={`h-10 md:h-12 w-auto transition-all ${
               isDark || isScrolled
@@ -705,7 +705,7 @@ const Footer = () => (
       <div className="flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-12 mb-12 gap-8">
         <a href="/" className="flex items-center">
           <img 
-            src="https://raw.githubusercontent.com/PHDStudioBR/PHDStudioImages/main/Dra%20Hajir%20Abdalla.svg" 
+            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg" 
             alt="Dra. Hajir Abdalla" 
             className="h-10 filter grayscale brightness-200"
           />
