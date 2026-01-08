@@ -45,11 +45,11 @@ const Header = () => {
     const html = document.documentElement;
     const body = document.body;
     if (initialDark) {
-      html.classList.add('dark');
-      body.classList.add('dark');
+      if (html) html.classList.add('dark');
+      if (body) body.classList.add('dark');
     } else {
-      html.classList.remove('dark');
-      body.classList.remove('dark');
+      if (html) html.classList.remove('dark');
+      if (body) body.classList.remove('dark');
     }
   }, []);
 
@@ -61,17 +61,17 @@ const Header = () => {
     
     // Usar add/remove explícitos para garantir que a classe seja atualizada corretamente
     if (next) {
-      html.classList.add('dark');
-      body.classList.add('dark');
+      if (html) html.classList.add('dark');
+      if (body) body.classList.add('dark');
     } else {
-      html.classList.remove('dark');
-      body.classList.remove('dark');
+      if (html) html.classList.remove('dark');
+      if (body) body.classList.remove('dark');
     }
     
     localStorage.setItem('theme', next ? 'dark' : 'light');
     
     // Forçar reflow para garantir que os estilos sejam recalculados
-    void html.offsetHeight;
+    if (html) void html.offsetHeight;
   };
   const menuItems = [
     { label: 'Sobre', href: '#sobre' },
@@ -86,7 +86,7 @@ const Header = () => {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isDark 
         ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5') 
-        : (isScrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5')
+        : (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-transparent py-5')
     }`}>
       <div className="container mx-auto px-4 flex items-center justify-between">
         <a href="/" className="flex items-center">
@@ -94,9 +94,9 @@ const Header = () => {
             src="https://raw.githubusercontent.com/PHDStudioBR/PHDStudioImages/main/Dra%20Hajir%20Abdalla.svg" 
             alt="Logo Dra. Hajir Abdalla" 
             className={`h-10 md:h-12 w-auto transition-all ${
-              isDark 
-                ? 'invert brightness-0' 
-                : (isScrolled ? 'brightness-100 opacity-90' : 'brightness-100 opacity-90')
+              isDark || isScrolled
+                ? 'filter grayscale brightness-200'
+                : 'filter grayscale brightness-0'
             }`}
           />
         </a>
@@ -105,9 +105,9 @@ const Header = () => {
         <nav className="hidden lg:flex items-center space-x-8">
           {menuItems.map((item) => (
             <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${
-              isDark 
-                ? 'text-slate-200 hover:text-white' 
-                : (isScrolled ? 'text-slate-700 hover:text-[#2D5B7C]' : 'text-slate-700 hover:text-[#2D5B7C]')
+              isDark || isScrolled
+                ? 'text-white hover:text-white'
+                : 'text-slate-900 hover:text-[#2D5B7C]'
             }`}>
               {item.label}
             </a>
@@ -123,9 +123,9 @@ const Header = () => {
             onClick={toggleTheme}
             aria-label="Alternar modo escuro"
             className={`ml-4 p-2 rounded-full transition-colors ${
-              isDark 
-                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700' 
-                : (isScrolled ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200')
+              isDark || isScrolled
+                ? 'bg-slate-800 text-white hover:bg-slate-700' 
+                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
             }`}
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
@@ -135,9 +135,7 @@ const Header = () => {
         {/* Mobile Toggle */}
         <button 
           className={`lg:hidden p-2 ${
-            isDark 
-              ? 'text-white' 
-              : (isScrolled ? 'text-slate-700' : 'text-slate-700')
+            isDark || isScrolled ? 'text-white' : 'text-slate-900'
           }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Abrir menu"
@@ -148,9 +146,9 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       <div className={`lg:hidden fixed inset-0 ${
-        isDark 
-          ? 'bg-slate-900 text-slate-200' 
-          : 'bg-white text-slate-800'
+        isDark || isScrolled
+          ? 'bg-slate-900 text-white' 
+          : 'bg-white text-slate-900'
       } z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full p-8">
           <div className="flex justify-end mb-8">
@@ -163,9 +161,9 @@ const Header = () => {
                 href={item.href} 
                 onClick={() => setIsMenuOpen(false)}
                 className={`text-xl font-medium pb-2 border-b ${
-                  isDark 
-                    ? 'text-slate-200 border-slate-700' 
-                    : 'text-slate-800 border-slate-100'
+                  isDark || isScrolled
+                    ? 'text-white border-slate-700' 
+                    : 'text-slate-900 border-slate-100'
                 }`}
               >
                 {item.label}

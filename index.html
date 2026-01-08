@@ -49,19 +49,26 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 <script>
-  // Aplicar tema antes do React renderizar para evitar flash
   (function() {
     const saved = localStorage.getItem('theme');
     const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDark = saved ? saved === 'dark' : prefers;
-    const html = document.documentElement;
-    const body = document.body;
-    if (isDark) {
-      html.classList.add('dark');
-      body.classList.add('dark');
+    const applyTheme = () => {
+      const html = document.documentElement;
+      const body = document.body;
+      if (!html || !body) return;
+      if (isDark) {
+        html.classList.add('dark');
+        body.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+        body.classList.remove('dark');
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyTheme, { once: true });
     } else {
-      html.classList.remove('dark');
-      body.classList.remove('dark');
+      applyTheme();
     }
   })();
 </script>
