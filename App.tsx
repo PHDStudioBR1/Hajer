@@ -302,7 +302,7 @@ const Hero = () => (
             className="w-full h-full object-cover"
             poster="https://picsum.photos/seed/doc/800/450"
           >
-            <source src="/video.mp4" type="video/mp4" />
+            <source src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Video%20Introdut%C3%B3rio_1.mp4" type="video/mp4" />
             Seu navegador não suporta a reprodução de vídeos.
           </video>
         </div>
