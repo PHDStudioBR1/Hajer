@@ -718,7 +718,7 @@ const Footer = () => (
         </nav>
       </div>
       <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
-        <p>© 2024 Dra. Hajir Abdalla - Todos os direitos reservados. CRM/SP 207200.</p>
+        <p>© 2024 Hajer Abdalla - Todos os direitos reservados. CRM/SP 207200.</p>
         <div className="flex items-center gap-6">
           <a href="#" className="hover:text-white underline">Política de Privacidade</a>
           <a href="#" className="hover:text-white underline">Cancelamento</a>
