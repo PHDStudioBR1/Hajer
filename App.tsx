@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Video, 
-  MessageCircle, 
-  CheckCircle2, 
-  Clock, 
-  ShieldCheck, 
-  Menu, 
-  X, 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  Video,
+  MessageCircle,
+  CheckCircle2,
+  Clock,
+  ShieldCheck,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp,
   Star,
   Brain,
   Activity,
@@ -58,7 +58,7 @@ const Header = () => {
     setIsDark(next);
     const html = document.documentElement;
     const body = document.body;
-    
+
     // Usar add/remove explícitos para garantir que a classe seja atualizada corretamente
     if (next) {
       if (html) html.classList.add('dark');
@@ -67,9 +67,9 @@ const Header = () => {
       if (html) html.classList.remove('dark');
       if (body) body.classList.remove('dark');
     }
-    
+
     localStorage.setItem('theme', next ? 'dark' : 'light');
-    
+
     // Forçar reflow para garantir que os estilos sejam recalculados
     if (html) void html.offsetHeight;
   };
@@ -83,60 +83,55 @@ const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isDark 
-        ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5') 
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isDark
+        ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5')
         : (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-transparent py-5')
-    }`}>
+      }`}>
       <div className="container mx-auto px-4 flex items-center justify-between">
         <a href="/" className="flex items-center">
-          <img 
-            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg" 
-            alt="Logo Dra. Hajir Abdalla" 
-            className={`h-10 md:h-12 w-auto transition-all ${
-              isDark || isScrolled
+          <img
+            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg"
+            alt="Logo Dra. Hajir Abdalla"
+            className={`h-10 md:h-12 w-auto transition-all ${isDark || isScrolled
                 ? 'filter grayscale brightness-200'
                 : 'filter grayscale brightness-0'
-            }`}
+              }`}
           />
         </a>
 
         {/* Desktop Menu */}
         <nav className="hidden lg:flex items-center space-x-8">
           {menuItems.map((item) => (
-            <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${
-              isDark || isScrolled
+            <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${isDark || isScrolled
                 ? 'text-white hover:text-white'
                 : 'text-slate-900 hover:text-[#2D5B7C]'
-            }`}>
+              }`}>
               {item.label}
             </a>
           ))}
-          <a 
-            href="https://wa.me/5511977920368" 
-            target="_blank" 
+          <a
+            href="https://wa.me/5511977920368"
+            target="_blank"
             className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-xl ${isDark ? 'bg-[#2D5B7C] text-white hover:bg-[#1e3d54]' : 'bg-[#2D5B7C] text-white hover:bg-[#1e3d54]'}`}
           >
             Agendar teleconsulta
           </a>
-          <button 
+          <button
             onClick={toggleTheme}
             aria-label="Alternar modo escuro"
-            className={`ml-4 p-2 rounded-full transition-colors ${
-              isDark || isScrolled
-                ? 'bg-slate-800 text-white hover:bg-slate-700' 
+            className={`ml-4 p-2 rounded-full transition-colors ${isDark || isScrolled
+                ? 'bg-slate-800 text-white hover:bg-slate-700'
                 : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
-            }`}
+              }`}
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </nav>
 
         {/* Mobile Toggle */}
-        <button 
-          className={`lg:hidden p-2 ${
-            isDark || isScrolled ? 'text-white' : 'text-slate-900'
-          }`}
+        <button
+          className={`lg:hidden p-2 ${isDark || isScrolled ? 'text-white' : 'text-slate-900'
+            }`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Abrir menu"
         >
@@ -145,32 +140,30 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`lg:hidden fixed inset-0 ${
-        isDark || isScrolled
-          ? 'bg-slate-900 text-white' 
+      <div className={`lg:hidden fixed inset-0 ${isDark || isScrolled
+          ? 'bg-slate-900 text-white'
           : 'bg-white text-slate-900'
-      } z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        } z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full p-8">
           <div className="flex justify-end mb-8">
             <button onClick={() => setIsMenuOpen(false)}><X size={32} /></button>
           </div>
           <nav className="flex flex-col space-y-6">
             {menuItems.map((item) => (
-              <a 
-                key={item.label} 
-                href={item.href} 
+              <a
+                key={item.label}
+                href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className={`text-xl font-medium pb-2 border-b ${
-                  isDark || isScrolled
-                    ? 'text-white border-slate-700' 
+                className={`text-xl font-medium pb-2 border-b ${isDark || isScrolled
+                    ? 'text-white border-slate-700'
                     : 'text-slate-900 border-slate-100'
-                }`}
+                  }`}
               >
                 {item.label}
               </a>
             ))}
-            <a 
-              href="https://wa.me/5511977920368" 
+            <a
+              href="https://wa.me/5511977920368"
               className={`${isDark ? 'bg-[#2D5B7C] text-white' : 'bg-[#2D5B7C] text-white'} text-center py-4 rounded-xl font-bold text-lg`}
             >
               Agendar teleconsulta
@@ -197,7 +190,7 @@ const InstagramCarousel = () => {
             return;
           }
         }
-      } catch {}
+      } catch { }
       const scriptEl = document.getElementById('instagram-posts');
       if (scriptEl && scriptEl.textContent) {
         try {
@@ -205,7 +198,7 @@ const InstagramCarousel = () => {
           if (Array.isArray(data) && data.length > 0) {
             setPosts(data);
           }
-        } catch {}
+        } catch { }
       }
     };
     load();
@@ -224,13 +217,13 @@ const InstagramCarousel = () => {
             <p className="text-slate-600 dark:text-slate-300">Acompanhe conteúdos e atualizações.</p>
           </div>
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
               className="p-3 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
               <ChevronDown className="rotate-90" />
             </button>
-            <button 
+            <button
               onClick={() => scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
               className="p-3 bg-slate-100 dark:bg-slate-800 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
@@ -238,7 +231,7 @@ const InstagramCarousel = () => {
             </button>
           </div>
         </div>
-        <div 
+        <div
           ref={scrollRef}
           className="flex overflow-x-auto gap-6 pb-8 snap-x no-scrollbar"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -275,14 +268,14 @@ const Hero = () => (
           Consulta por vídeo com abordagem humana e explicativa, focada em qualidade de vida e funcionalidade.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <a 
-            href="#contato" 
+          <a
+            href="#contato"
             className="flex items-center justify-center gap-2 bg-[#2D5B7C] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[#1e3d54] transition-all shadow-xl hover:-translate-y-1"
           >
             Agendar teleconsulta
           </a>
-          <a 
-            href="https://wa.me/5511977920368" 
+          <a
+            href="https://wa.me/5511977920368"
             className="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-[#2D5B7C] dark:text-slate-200 border-2 border-[#2D5B7C] dark:border-slate-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-md"
           >
             <MessageCircle size={22} />
@@ -293,8 +286,8 @@ const Hero = () => (
       <div className="relative group">
         <div className="absolute -inset-4 bg-[#7EAA92]/20 rounded-[2rem] blur-xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
         <div className="relative bg-slate-200 dark:bg-slate-800 aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-700 group">
-          <video 
-            controls 
+          <video
+            controls
             loop
             autoPlay
             muted
@@ -353,35 +346,35 @@ const HowItWorks = () => {
 
 const AreasOfExpertise = () => {
   const specialties = [
-    { 
-      title: "Ansiedade", 
-      icon: <Activity />, 
-      desc: "Tratamento para quadros de preocupação excessiva, pânico e fobias que impactam seu dia a dia." 
+    {
+      title: "Ansiedade",
+      icon: <Activity />,
+      desc: "Tratamento para quadros de preocupação excessiva, pânico e fobias que impactam seu dia a dia."
     },
-    { 
-      title: "Depressão", 
-      icon: <Heart />, 
-      desc: "Suporte especializado para recuperar o ânimo, a energia e o prazer nas atividades cotidianas." 
+    {
+      title: "Depressão",
+      icon: <Heart />,
+      desc: "Suporte especializado para recuperar o ânimo, a energia e o prazer nas atividades cotidianas."
     },
-    { 
-      title: "Insônia", 
-      icon: <Moon />, 
-      desc: "Higiene do sono e intervenções para distúrbios que afetam sua reparação física e mental." 
+    {
+      title: "Insônia",
+      icon: <Moon />,
+      desc: "Higiene do sono e intervenções para distúrbios que afetam sua reparação física e mental."
     },
-    { 
-      title: "Burnout", 
-      icon: <Zap />, 
-      desc: "Cuidado focado em estresse crônico relacionado ao trabalho e exaustão emocional." 
+    {
+      title: "Burnout",
+      icon: <Zap />,
+      desc: "Cuidado focado em estresse crônico relacionado ao trabalho e exaustão emocional."
     },
-    { 
-      title: "Humor", 
-      icon: <Brain />, 
-      desc: "Diagnóstico e manejo de transtornos bipolares e oscilações emocionais intensas." 
+    {
+      title: "Humor",
+      icon: <Brain />,
+      desc: "Diagnóstico e manejo de transtornos bipolares e oscilações emocionais intensas."
     },
-    { 
-      title: "TDAH Adulto", 
-      icon: <Dna />, 
-      desc: "Foco em funcionalidade, organização e estratégias para melhorar a atenção e o foco." 
+    {
+      title: "TDAH Adulto",
+      icon: <Dna />,
+      desc: "Foco em funcionalidade, organização e estratégias para melhorar a atenção e o foco."
     }
   ];
 
@@ -416,9 +409,9 @@ const AboutSection = () => (
     <div className="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
       <div className="relative">
         <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#7EAA92]/10 rounded-full blur-3xl"></div>
-        <img 
-          src="/about.jpg" 
-          alt="Dra. Hajir Abdalla" 
+        <img
+          src="/about.jpg"
+          alt="Dra. Hajir Abdalla"
           className="rounded-[3rem] shadow-2xl relative z-10 w-full object-cover"
           onError={(e) => { (e.currentTarget as HTMLImageElement).src = "https://picsum.photos/seed/doctor/600/800"; }}
         />
@@ -475,7 +468,7 @@ const Testimonials = () => {
             }
           }
         }
-      } catch {}
+      } catch { }
       const scriptEl = document.getElementById('google-reviews');
       if (scriptEl && scriptEl.textContent) {
         try {
@@ -492,7 +485,7 @@ const Testimonials = () => {
               setReviews(normalized);
             }
           }
-        } catch {}
+        } catch { }
       }
     };
     load();
@@ -507,13 +500,13 @@ const Testimonials = () => {
             <p className="text-slate-600 dark:text-slate-300">A prova de um cuidado feito com propósito.</p>
           </div>
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={() => scrollRef.current?.scrollBy({ left: -300, behavior: 'smooth' })}
               className="p-3 bg-white dark:bg-slate-800 rounded-full shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               <ChevronDown className="rotate-90" />
             </button>
-            <button 
+            <button
               onClick={() => scrollRef.current?.scrollBy({ left: 300, behavior: 'smooth' })}
               className="p-3 bg-white dark:bg-slate-800 rounded-full shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
@@ -521,7 +514,7 @@ const Testimonials = () => {
             </button>
           </div>
         </div>
-        <div 
+        <div
           ref={scrollRef}
           className="flex overflow-x-auto gap-6 pb-8 snap-x no-scrollbar"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -558,7 +551,7 @@ const FAQSection = () => {
         <div className="space-y-4">
           {faqs.map((faq, idx) => (
             <div key={idx} className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
-              <button 
+              <button
                 onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
               >
@@ -606,8 +599,8 @@ const ContactForm = () => {
             Agende sua consulta e inicie sua jornada de cuidado com suporte especializado e humanizado.
           </p>
           <div className="space-y-6">
-            <a 
-              href="https://wa.me/5511977920368" 
+            <a
+              href="https://wa.me/5511977920368"
               className="flex items-center gap-4 bg-white/10 hover:bg-white/20 p-6 rounded-2xl transition-all border border-white/20 group"
             >
               <div className="w-12 h-12 bg-[#7EAA92] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -618,9 +611,9 @@ const ContactForm = () => {
                 <div className="text-lg font-bold">Falar agora pelo WhatsApp</div>
               </div>
             </a>
-            <a 
-              href="https://www.instagram.com/drahaabdalla/" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/drahaabdalla/"
+              target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-4 bg-white/10 hover:bg-white/20 p-6 rounded-2xl border border-white/20"
             >
@@ -632,57 +625,71 @@ const ContactForm = () => {
                 <div className="text-lg font-bold">@drahaabdalla</div>
               </div>
             </a>
+
+            {/* QR Code Section */}
+            <div className="bg-white/10 p-8 rounded-2xl border border-white/20 flex flex-col items-center text-center">
+              <div className="bg-white p-4 rounded-xl shadow-lg mb-6">
+                <img
+                  src="/qrcode-whatsapp.png"
+                  alt="WhatsApp QR Code"
+                  className="w-48 h-48 md:w-56 md:h-56 object-contain"
+                />
+              </div>
+              <p className="text-blue-100 text-sm md:text-base leading-relaxed max-w-[280px]">
+                Escaneie o QR code para acessar nosso WhatsApp e falar diretamente com a equipe da PHD Studio.
+              </p>
+            </div>
           </div>
         </div>
         <div className="bg-white p-8 md:p-10 rounded-3xl shadow-2xl text-slate-800">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Nome Completo</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 required
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-[#2D5B7C] focus:ring-2 focus:ring-[#2D5B7C]/20 transition-all outline-none"
                 placeholder="Como deseja ser chamado?"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Telefone/WhatsApp</label>
-                <input 
-                  type="tel" 
+                <input
+                  type="tel"
                   required
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-[#2D5B7C] focus:ring-2 focus:ring-[#2D5B7C]/20 transition-all outline-none"
                   placeholder="(00) 00000-0000"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 />
               </div>
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">E-mail</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   required
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-[#2D5B7C] focus:ring-2 focus:ring-[#2D5B7C]/20 transition-all outline-none"
                   placeholder="exemplo@email.com"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
             </div>
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Mensagem (opcional)</label>
-              <textarea 
+              <textarea
                 rows={4}
                 className="w-full px-5 py-4 rounded-xl border border-slate-200 focus:border-[#2D5B7C] focus:ring-2 focus:ring-[#2D5B7C]/20 transition-all outline-none"
                 placeholder="Conte-me brevemente como posso ajudar..."
                 value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               />
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="w-full bg-[#2D5B7C] text-white py-5 rounded-xl font-bold text-lg hover:bg-[#1e3d54] transition-all shadow-lg"
             >
               Enviar Solicitação de Agendamento
@@ -704,9 +711,9 @@ const Footer = () => (
     <div className="container mx-auto px-4">
       <div className="flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-12 mb-12 gap-8">
         <a href="/" className="flex items-center">
-          <img 
-            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg" 
-            alt="Dra. Hajir Abdalla" 
+          <img
+            src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg"
+            alt="Dra. Hajir Abdalla"
             className="h-10 filter grayscale brightness-200"
           />
         </a>
@@ -754,10 +761,10 @@ export default function App() {
         <ContactForm />
       </main>
       <Footer />
-      
+
       {/* Persistent Floating WhatsApp (Mobile Friendly) */}
-      <a 
-        href="https://wa.me/5511977920368" 
+      <a
+        href="https://wa.me/5511977920368"
         target="_blank"
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform md:p-5"
         aria-label="Falar no WhatsApp"
