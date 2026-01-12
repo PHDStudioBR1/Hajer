@@ -629,7 +629,7 @@ const ContactForm = () => {
             {/* QR Code Section */}
             {/* QR Code Section - Refined for Desktop */}
             <div className="bg-white/10 p-6 rounded-2xl border border-white/20 flex flex-col md:flex-row items-center text-center md:text-left gap-6">
-              <div className="bg-white p-3 rounded-xl shrink-0">
+              <div className="bg-[#FFFFFF] p-3 rounded-xl shrink-0">
                 <img
                   src="/qrcode-whatsapp.png"
                   alt="WhatsApp QR Code"
