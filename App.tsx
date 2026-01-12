@@ -84,8 +84,8 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isDark
-        ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5')
-        : (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-transparent py-5')
+      ? (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-slate-900 py-5')
+      : (isScrolled ? 'bg-slate-900 shadow-md py-3' : 'bg-transparent py-5')
       }`}>
       <div className="container mx-auto px-4 flex items-center justify-between">
         <a href="/" className="flex items-center">
@@ -93,8 +93,8 @@ const Header = () => {
             src="https://raw.githubusercontent.com/PHDStudioBR1/Hajer/main/Logo%20Site.svg"
             alt="Logo Dra. Hajir Abdalla"
             className={`h-10 md:h-12 w-auto transition-all ${isDark || isScrolled
-                ? 'filter grayscale brightness-200'
-                : 'filter grayscale brightness-0'
+              ? 'filter grayscale brightness-200'
+              : 'filter grayscale brightness-0'
               }`}
           />
         </a>
@@ -103,8 +103,8 @@ const Header = () => {
         <nav className="hidden lg:flex items-center space-x-8">
           {menuItems.map((item) => (
             <a key={item.label} href={item.href} className={`text-sm font-medium transition-colors ${isDark || isScrolled
-                ? 'text-white hover:text-white'
-                : 'text-slate-900 hover:text-[#2D5B7C]'
+              ? 'text-white hover:text-white'
+              : 'text-slate-900 hover:text-[#2D5B7C]'
               }`}>
               {item.label}
             </a>
@@ -120,8 +120,8 @@ const Header = () => {
             onClick={toggleTheme}
             aria-label="Alternar modo escuro"
             className={`ml-4 p-2 rounded-full transition-colors ${isDark || isScrolled
-                ? 'bg-slate-800 text-white hover:bg-slate-700'
-                : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
+              ? 'bg-slate-800 text-white hover:bg-slate-700'
+              : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
               }`}
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
@@ -141,8 +141,8 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       <div className={`lg:hidden fixed inset-0 ${isDark || isScrolled
-          ? 'bg-slate-900 text-white'
-          : 'bg-white text-slate-900'
+        ? 'bg-slate-900 text-white'
+        : 'bg-white text-slate-900'
         } z-40 transform transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full p-8">
           <div className="flex justify-end mb-8">
@@ -155,8 +155,8 @@ const Header = () => {
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className={`text-xl font-medium pb-2 border-b ${isDark || isScrolled
-                    ? 'text-white border-slate-700'
-                    : 'text-slate-900 border-slate-100'
+                  ? 'text-white border-slate-700'
+                  : 'text-slate-900 border-slate-100'
                   }`}
               >
                 {item.label}
@@ -627,17 +627,20 @@ const ContactForm = () => {
             </a>
 
             {/* QR Code Section */}
-            <div className="bg-white/10 p-8 rounded-2xl border border-white/20 flex flex-col items-center text-center">
-              <div className="bg-white p-4 rounded-xl shadow-lg mb-6">
+            {/* QR Code Section - Refined for Desktop */}
+            <div className="bg-white/10 p-6 rounded-2xl border border-white/20 flex flex-col md:flex-row items-center text-center md:text-left gap-6">
+              <div className="bg-white p-3 rounded-xl shrink-0">
                 <img
                   src="/qrcode-whatsapp.png"
                   alt="WhatsApp QR Code"
-                  className="w-48 h-48 md:w-56 md:h-56 object-contain"
+                  className="w-32 h-32 object-contain"
                 />
               </div>
-              <p className="text-blue-100 text-sm md:text-base leading-relaxed max-w-[280px]">
-                Escaneie o QR code para acessar nosso WhatsApp e falar diretamente com a equipe da PHD Studio.
-              </p>
+              <div>
+                <p className="text-blue-100 text-sm md:text-base leading-relaxed">
+                  Escaneie o QR code para acessar nosso WhatsApp para tirar dúvidas e fazer agendamentos.
+                </p>
+              </div>
             </div>
           </div>
         </div>
