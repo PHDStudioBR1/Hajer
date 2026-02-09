@@ -1,0 +1,136 @@
+name: CI/CD Pipeline - Hajer
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: {}
+
+env:
+  DOCKER_REGISTRY: donavanalencar # altere para o seu usuário do Docker Hub
+  IMAGE_NAME: hajer-site
+  K8S_NAMESPACE: phdstudio
+
+jobs:
+  validate:
+    name: Validar e Buildar Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build Frontend
+        run: npm run build
+
+  build:
+    name: Build e Push Docker
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build e Push Imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-to: type=inline
+
+  deploy:
+    name: Deploy no Kubernetes
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configurar acesso ao cluster
+        run: |
+          mkdir -p $HOME/.kube
+
+          if [ -z "${{ secrets.KUBECONFIG }}" ]; then
+            echo "⚠️ Secret KUBECONFIG não configurado"
+            exit 1
+          fi
+
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+          if [ ! -f "$HOME/.kube/config" ]; then
+            echo "❌ Erro ao criar $HOME/.kube/config"
+            exit 1
+          fi
+
+          kubectl cluster-info || {
+            echo "⚠️ Erro ao conectar ao cluster. Verifique o KUBECONFIG."
+            exit 1
+          }
+
+      - name: Aplicar Deployment e Service
+        run: |
+          kubectl apply -f infra/k8s/frontend-deployment.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Aplicar IngressRoute
+        run: |
+          kubectl apply -f infra/k8s/ingress-route-frontend.yaml -n ${{ env.K8S_NAMESPACE }}
+
+      - name: Atualizar imagem do Deployment
+        run: |
+          kubectl set image deployment/hajer-frontend \
+            hajer-frontend=${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -n ${{ env.K8S_NAMESPACE }}
+          kubectl rollout status deployment/hajer-frontend -n ${{ env.K8S_NAMESPACE }} --timeout=300s
+
+      - name: Status Final
+        run: |
+          echo "=== Pods ==="
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }}
+          echo ""
+          echo "=== Deployments ==="
+          kubectl get deployments -n ${{ env.K8S_NAMESPACE }}
+          echo ""
+          echo "=== Services ==="
+          kubectl get services -n ${{ env.K8S_NAMESPACE }}
+
