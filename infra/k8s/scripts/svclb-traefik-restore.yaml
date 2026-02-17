@@ -1,0 +1,76 @@
+# DaemonSet para restaurar encaminhamento 80/443 -> Traefik (recriação do svclb removido).
+# ClusterIP do Service traefik em kube-system deve ser 10.43.160.14 (ajuste se mudar).
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: svclb-traefik-restore
+  namespace: kube-system
+  labels:
+    app: svclb-traefik-restore
+spec:
+  selector:
+    matchLabels:
+      app: svclb-traefik-restore
+  template:
+    metadata:
+      labels:
+        app: svclb-traefik-restore
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
+      serviceAccountName: svclb
+      securityContext:
+        sysctls:
+          - name: net.ipv4.ip_forward
+            value: "1"
+      containers:
+        - name: lb-tcp-80
+          image: rancher/klipper-lb:v0.4.13
+          env:
+            - name: SRC_PORT
+              value: "80"
+            - name: SRC_RANGES
+              value: 0.0.0.0/0
+            - name: DEST_PROTO
+              value: TCP
+            - name: DEST_PORT
+              value: "80"
+            - name: DEST_IPS
+              value: "10.43.160.14"
+          ports:
+            - containerPort: 80
+              hostPort: 80
+              name: lb-tcp-80
+              protocol: TCP
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+        - name: lb-tcp-443
+          image: rancher/klipper-lb:v0.4.13
+          env:
+            - name: SRC_PORT
+              value: "443"
+            - name: SRC_RANGES
+              value: 0.0.0.0/0
+            - name: DEST_PROTO
+              value: TCP
+            - name: DEST_PORT
+              value: "443"
+            - name: DEST_IPS
+              value: "10.43.160.14"
+          ports:
+            - containerPort: 443
+              hostPort: 443
+              name: lb-tcp-443
+              protocol: TCP
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1

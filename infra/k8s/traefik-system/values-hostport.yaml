@@ -1,0 +1,45 @@
+# Traefik Helm - expor portas 80 e 443 no host (single node)
+# Uso: helm install traefik traefik/traefik -n traefik -f infra/k8s/traefik-system/values-hostport.yaml
+# Repo: helm repo add traefik https://traefik.github.io/charts && helm repo update
+#
+# ingressClass.enabled: false evita conflito com o Traefik do K3s (kube-system)
+# que já criou a IngressClass "traefik". Este release só coloca outro Traefik em 80/443.
+
+ingressClass:
+  enabled: false
+
+deployment:
+  # Usar rede do host para escutar em 80/443 diretamente no nó
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  replicas: 1
+
+# Portas web=80 e websecure=443. hostPort: null para usar só hostNetwork (evita conflito no scheduler).
+ports:
+  web:
+    port: 80
+    hostPort: null
+  websecure:
+    port: 443
+    hostPort: null
+  traefik:
+    hostPort: null
+  metrics:
+    hostPort: null
+
+# Certificado Let's Encrypt (certResolver "le" usado nas IngressRoutes)
+certificatesResolvers:
+  le:
+    acme:
+      email: admin@drahaabdalla.com   # Ajuste para um email válido do domínio
+      storage: /data/acme.json
+      httpChallenge:
+        entryPoint: web
+
+# Permitir IngressRoute referenciar middlewares em outros namespaces (ex.: phdstudio)
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
+
+# O chart monta um volume "data" por padrão para /data (acme.json).
+# Em muitos ambientes um emptyDir é suficiente; para persistir entre restarts use um PVC no chart.

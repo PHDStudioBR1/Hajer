@@ -7,13 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-    # Exceção para o ACME challenge (Let's Encrypt)
-    - match: Host(`hajir.drahaabdalla.com`) && PathPrefix(`/.well-known/acme-challenge`)
-      kind: Rule
-      services:
-        - name: hajer-web-service
-          port: 80
-    # Demais requisições HTTP redirecionam para HTTPS
+    # Todas as requisições HTTP redirecionam para HTTPS
     - match: Host(`hajir.drahaabdalla.com`) && PathPrefix(`/`)
       kind: Rule
       services:
